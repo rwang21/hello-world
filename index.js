@@ -1,52 +1,53 @@
-function sum(...nums) {
-    var sum = 0;
+var fs = require('fs');
+var os = require("os");   
+var crlf = os.EOL;
 
-    if (nums.length === 0) {
-        return sum;
-    }
-
-    for (var i of nums) {
-        sum += i;
-    }
-
-    return sum;
-
+function readFile(name, encoding) {
+    return new Promise(
+        (resolve, reject) => {
+            fs.readFile(name, encoding, function (err, contents) {
+                if (err) {
+                    reject(err);
+                    return;
+                }
+                resolve(contents);
+            });
+        }
+    );
 }
 
-function sum2() {
-    var sum = 0;
-
-    if (arguments.length === 0) {
-        return sum;
-    }
-
-    for (var i of arguments) {
-        sum += arguments[i];
-    }
-
-    return sum;
-
+function writeFile(name, contents) {
+    return new Promise(
+        (resolve, reject) => {
+            fs.writeFile(name, contents, function(err) {
+                if (err) {
+                    reject(err);
+                }
+                else {
+                    resolve('success');
+                }
+            });
+        }
+    );
 }
 
-console.log(sum(5, -3, 11));
-console.log(sum2());
-
-function upperJoin(...strs) {
-    var str = '';
-
-    if (strs.length === 0) {
-        return str;
+var p = readFile('file.txt', 'utf8');
+p.then(
+    (val) => {
+        var arr = val.split(crlf);
+        arr.sort();
+        return writeFile('output.txt', arr.join(crlf));
     }
-
-    for (var astr of strs) {
-        str += astr.toUpperCase();
+).then(
+    (val) => {
+        console.log(val);
     }
+).catch(
+    (err) => {
+        console.log(err);
+        // handle all possible problems
+    }
+);
 
-    return str;
-
-}
-
-console.log(upperJoin("hi",  "bye", "yo"));
-
-exports.sum = sum;
-
+exports.writeFile = writeFile;
+exports.readFile = readFile;

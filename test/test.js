@@ -1,30 +1,14 @@
-var main = require('../index.js');
-var assert = require('assert');
+var main = require('../index');
+var fs = require('fs');
 
-describe('add two numbers', function () {
+var chai = require("chai");
+var chaiAsPromised = require("chai-as-promised");
+chai.use(chaiAsPromised);
+chai.should();
+//var assert = chai.expect;
 
-    it('should return the sum', function () {
-        assert.equal(main.sum(1,1), 2);
-    })
-})
-
-describe('add three numbers', function () {
-
-    it('should return the sum', function () {
-        assert.equal(main.sum(1,1,1), 3);
-    })
-})
-
-describe('add one number', function () {
-
-    it('should return the sum', function () {
-        assert.equal(main.sum(1), 1);
-    })
-})
-
-describe('add zero numbers', function () {
-
-    it('should return the sum', function () {
-        assert.equal(main.sum(), 0);
-    })
-})
+describe('read file', function () {
+    it('gets data from file', function () {
+        return main.readFile('file1.txt', 'utf8').should.eventually.equal("example");
+    });
+});
